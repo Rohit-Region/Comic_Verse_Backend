@@ -5,15 +5,23 @@ const comicSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  name: {
+  comic_name: {
     type: String,
     required: true,
   },
-  rating: {
-    type: Number,
+  auhtor_name: {
+    type: String,
+    required: false,
+  },
+  // rating: {
+  //   type: Number,
+  //   required: true,
+  // },
+  genre: {
+    type: String,
     required: true,
   },
-  genre: {
+  description: {
     type: String,
     required: true,
   },
@@ -25,7 +33,6 @@ const comicSchema = new mongoose.Schema({
       destination: { type: String },
       path: { type: String },
     },
-    required: true,
   },
   pdf: {
     type: {
@@ -35,7 +42,6 @@ const comicSchema = new mongoose.Schema({
       destination: { type: String },
       path: { type: String },
     },
-    required: true,
   },
   created_at: {
     type: Date,

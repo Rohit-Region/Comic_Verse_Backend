@@ -50,9 +50,10 @@ router.post('/upload', (req, res) => {
      console.log("files",req.body)
       let comicData = {
         comic_id:req.body.comic_id,
-        name: req.body.name,
-        rating: req.body.rating,
+        comic_name: req.body.comic_name,
+        author_name:req.body.author_name,
         genre: req.body.genre,
+        description:req.body.description,
         image: {
           originalname: req.files.image[0].originalname,
           filename: req.files.image[0].filename,
@@ -66,9 +67,9 @@ router.post('/upload', (req, res) => {
           mimetype: req.files.pdf[0].mimetype,
           destination: req.files.pdf[0].destination,
           size: req.files.pdf[0].size
-        }      };
-      // console.log("vada",comicData)
-      // Create a new comic document
+        }
+            };
+   
       const comic = new Comic(comicData);
 
       // Save the comic to the database using async/await
