@@ -1,22 +1,24 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
+  userId: {
+    type: Number,
+    unique: true, // This ensures each user has a unique userId
+  },
   name: {
     type: String,
-    required: true,
   },
   email: {
     type: String,
     required: true,
     unique: true,
   },
-  phone_number: {
+  phoneNumber: {
     type: Number,
-    required: true,
   },
   role: {
     type: String,
-    enum: ['admin', 'user'], 
+    enum: ['admin', 'author','user'], 
     default: 'user',
   },
   password: {

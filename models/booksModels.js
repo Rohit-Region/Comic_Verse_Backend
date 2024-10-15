@@ -1,38 +1,33 @@
 const mongoose = require('mongoose');
 
 const booksModels = new mongoose.Schema({
-    comic_id:{
-        type:Number,
-        required:true,
-    },
-    comic_name:{
-        type:String,
-        required:true,
-    },
-    comic_rating:{
-        type:String,
-    },
-    comic_episodes:{
-        type:String,
-    },
-    comic_reviews:{
-        type:String,
-    },    
-    genre: {
-        type: String,
+    comicId: {
+        type: Number,
         required: true,
       },
-      image: {
-        type: {
-          originalname: { type: String },
-          filename: { type: String },
-          mimetype: { type: String },
-          destination: { type: String },
-          path: { type: String },
+      rating: {
+        type: Number,
+      },
+      comments: [
+        {
+          userId: { type: Number, required: true },
+          name: { type: String, required: true },
+          comment: { type: String, required: true },
+          date: { type: Date, default: Date.now },
         },
+      ],
+    
+      likes: {
+        type: Number,
+      },
+      viewed: {
+        type: Number,
+      },
+      Purchased: {
+        type: Number,
       },
     
 })
 
-const Comic = mongoose.model('Comic',booksModels)
+const Comic = mongoose.models.Comic || mongoose.model('Comic', booksModels);
 module.exports = Comic

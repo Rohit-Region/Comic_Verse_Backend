@@ -3,6 +3,7 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
 const comicRoutes = require('./routes/comicRoutes');
+const bookRoutes = require('./routes/booksRoutes');
 const path = require('path');
 const app = express();
 
@@ -16,7 +17,7 @@ app.use(express.urlencoded({ extended: true })); // This line is important for f
 
 // Routes
 app.use('/api', userRoutes); // User-related routes
-
+app.use('/api', bookRoutes);
 // Other middleware
 app.use('/api/comics', comicRoutes);
 // Start the server
