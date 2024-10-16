@@ -18,4 +18,6 @@ router.post('/purchase/:comicId', booksController.purchaseComic);
 // Optional: Batch update route
 router.post('/updates/:comicId', booksController.batchUpdate);
 
+router.get('/authorbooks/:authorId', booksController.getAuthorDetail);
+
 module.exports = router;

@@ -58,18 +58,17 @@ exports.likeComic = async (req, res) => {
     try {
       const { comicId } = req.params;
       const { userId, name, comment } = req.body; // Expecting { userId: 1, name: 'User Name', comment: 'Your comment here' }
-  
+      console.log(comment,userId, name,"comment : ")
       // Create a new comment object
       const newComment = {
-        userId,
-        name,
-        comment,
+        userId:userId,
+        name:name,
+        comment:comment,
         date: new Date(), // Automatically set the current date
       };
   
       // Find the comic and ensure comments is an array
       const comic = await Comic.findOne({ comicId });
-  
       if (!comic) {
         return res.status(404).json({ message: 'Comic not found' });
       }
@@ -78,13 +77,11 @@ exports.likeComic = async (req, res) => {
       if (!comic.comments) {
         comic.comments = [];
       }
-  
-      // Add the new comment to the comments array
+    
       comic.comments.push(newComment);
-  
-      // Save the updated comic
+    
       const updatedComic = await comic.save();
-  
+    
       res.status(200).json({
         message: 'Comment added successfully',
         comic: updatedComic,
@@ -118,7 +115,9 @@ exports.likeComic = async (req, res) => {
   
       res.status(200).json({
         message: 'Comic purchased successfully',
-        comic
+        comicId: comic.comicId,         // Include comicId for clarity
+        comic_name: comic.comic_name,    // Include comic_name explicitly
+        Purchased: comic.Purchased,
       });
     } catch (error) {
       console.error('Error purchasing comic:', error);
@@ -156,3 +155,30 @@ exports.likeComic = async (req, res) => {
       res.status(500).json({ message: 'Internal server error' });
     }
   };
+
+
+  exports.getAuthorDetail = async (req, res) => {
+    try {
+      console.log("MISS you");
+      const { authorId } = req.params;
+      const authorIdAsNumber = Number(authorId); // Convert to number
+      console.log("Author ID", authorIdAsNumber);
+  
+      // Use find() to get all matching documents instead of findOne()
+      const comics = await Comic.find({ authorID: authorIdAsNumber });
+      console.log(comics);
+  
+      if (!comics || comics.length === 0) {
+        return res.status(404).json({ message: 'Author not found' });
+      }
+  
+      res.status(200).json({
+        message: 'Author details retrieved successfully',
+        comics, // Send all the comics related to the authorId
+      });
+    } catch (error) {
+      console.error('Error retrieving Author details:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
+  

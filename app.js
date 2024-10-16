@@ -4,6 +4,7 @@ const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
 const comicRoutes = require('./routes/comicRoutes');
 const bookRoutes = require('./routes/booksRoutes');
+const authorRoutes = require('./routes/authorRoutes');
 const path = require('path');
 const app = express();
 
@@ -21,6 +22,7 @@ app.use('/api', bookRoutes);
 // Other middleware
 app.use('/api/comics', comicRoutes);
 // Start the server
+app.use('/api',authorRoutes);
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

@@ -60,11 +60,11 @@ exports.login = (req, res) => {
         return res.status(401).json({ message: 'Invalid credentials' });
       }
 
-      const { userId,name,email,role,phoneNumber } = user;
+      const { userId,name,email,role,phoneNumber,authorId } = user;
       const token = jwt.sign({ id: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
       const isLoggedIn = true;
       
-      return res.status(200).json({ isLoggedIn,userId,name,email,role, phoneNumber, message: 'Login successful', token });
+      return res.status(200).json({ isLoggedIn,userId,name,email,role,authorId, phoneNumber, message: 'Login successful', token });
     })
     .catch(err => {
       console.error('Error logging in', err);
@@ -76,20 +76,31 @@ exports.login = (req, res) => {
 // Update user profile using PATCH
 exports.updateProfile = async (req, res) => {
   const { userId } = req.params; // Assuming you're sending userId in the URL
-  console.log("uSer ID :",userId)  
+  console.log("User ID:", userId);
+  
   const updates = req.body; // Get all fields from the request body
-console.log("updates",updates)
-  try {
-    // Find the user by ID and update the fields provided in the request body
-    const updatedUser = await userModel.findOneAndUpdate( // Use findOneAndUpdate
-      { userId: userId }, // Query by userId
-      updates, // Update fields
-      { new: true, runValidators: true } // Options: return the updated document, apply validators
-    );
+  console.log("Updates:", updates);
 
-    if (!updatedUser) {
+  try {
+    // Find the user by userId
+    const user = await userModel.findOne({ userId: userId });
+
+    if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
+
+    // Update the fields provided in the request body
+    Object.assign(user, updates);
+
+    // Check if the role is set to 'author'
+    if (user.role === 'author') {
+      user.authorId = parseInt(`999${user.userId}`, 10); // Set authorId based on userId
+    } else {
+      user.authorId = undefined; // Clear authorId if not an author
+    }
+
+    // Save the updated user document
+    const updatedUser = await user.save();
 
     res.status(200).json({ data: updatedUser });
   } catch (err) {
@@ -97,5 +108,6 @@ console.log("updates",updates)
     res.status(400).json({ error: 'An error occurred', details: err });
   }
 };
+
 
 

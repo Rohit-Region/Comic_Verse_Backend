@@ -1,8 +1,20 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
- const AuthorSchema = new mongoose.Schema({
-    name:{
-        type:String,
-        required:true
-    }
- })
+const authorModels = new mongoose.Schema({
+      authorId: {
+        type: Number,
+        required: true,
+      },
+      comicId: {
+        type: Number,
+        required: true,
+      },
+      comic_name: {
+        type: String,
+        // required: true,
+      },
+    
+})
+
+const Comic = mongoose.models.Comic || mongoose.model('author', authorModels);
+module.exports = Comic
